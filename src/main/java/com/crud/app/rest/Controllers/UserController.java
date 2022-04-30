@@ -49,7 +49,7 @@ public class UserController {
 
     //trouver un user par son id
     @GetMapping(path = "/id")
-    public  User  findById(@RequestParam long id) {
+    public @ResponseBody User  findById(@RequestParam long id) {
         return userrepos.findById(id).orElse(null);
     }
    
@@ -86,21 +86,18 @@ public class UserController {
  
     //update  user
     @PostMapping(path = "/update")
-    public String updateUserById(User user){
+    public @ResponseBody String updateUserById(User user){
         User userFromDb = userrepos.findById(user.getId()).orElse(null);
-        userFromDb.setFirstname(user.getFirstname()); 
-        userFromDb.setLastName(user.getLastName());
-        userFromDb.setAge(user.getAge());
-        userFromDb.setOccupation(user.getOccupation());
+        userrepos.updatUser(userFromDb,user);
         userrepos.save(userFromDb);
         return "User updated";
     }
             
         //delete  user
         @DeleteMapping(path = "/delete/{id}")
-        public String deleteUserById(@PathVariable int id){
-            userrepos.deleteById((long) id);
-            return"User deleted";
+        public @ResponseBody String deleteUserById(@PathVariable long id){
+            userrepos.deleteById(id);
+            return "User deleted";
         }
     
 }
